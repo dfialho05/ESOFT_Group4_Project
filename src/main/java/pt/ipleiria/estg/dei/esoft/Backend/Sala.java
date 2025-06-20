@@ -32,82 +32,76 @@ enum TipoSala {
  */
 public class Sala {
     
-    private int idSala;
+    private int id;
+    private String nome;
+    private String tipoSala; // "Normal", "VIP", "IMAX", etc.
     private int capacidade;
-    private String configuracao; // descrição da configuração dos assentos
-    private boolean acessibilidade; // true se tem acesso para cadeira de rodas
-    private TipoSala tipoSala;
-    private boolean ativo; // true se a sala está ativa, false se inativa
+    private String configuracao; // e.g., "10x10"
+    private boolean ativo;
+    private String descricao;
     
-    /**
-     * Construtor padrão
-     */
-    public Sala() {
-        this.ativo = true; // por padrão, uma sala nova está ativa
-        this.tipoSala = TipoSala.NORMAL; // por padrão, sala normal
-    }
-    
-    /**
-     * Construtor com todos os parâmetros
-     */
-    public Sala(int idSala, int capacidade, String configuracao, 
-                boolean acessibilidade, TipoSala tipoSala, boolean ativo) {
-        this.idSala = idSala;
+    public Sala(int id, String nome, String tipoSala, int capacidade, String configuracao, boolean ativo, String descricao) {
+        this.id = id;
+        this.nome = nome;
+        this.tipoSala = tipoSala;
         this.capacidade = capacidade;
         this.configuracao = configuracao;
-        this.acessibilidade = acessibilidade;
-        this.tipoSala = tipoSala;
         this.ativo = ativo;
+        this.descricao = descricao;
     }
-    
-    // Getters e Setters
-    
-    public int getIdSala() {
-        return idSala;
+
+    // Getters
+    public int getId() {
+        return id;
     }
-    
-    public void setIdSala(int idSala) {
-        this.idSala = idSala;
+
+    public String getNome() {
+        return nome;
     }
-    
+
+    public String getTipoSala() {
+        return tipoSala;
+    }
+
     public int getCapacidade() {
         return capacidade;
     }
-    
-    public void setCapacidade(int capacidade) {
-        this.capacidade = capacidade;
-    }
-    
+
     public String getConfiguracao() {
         return configuracao;
     }
-    
-    public void setConfiguracao(String configuracao) {
-        this.configuracao = configuracao;
-    }
-    
-    public boolean isAcessibilidade() {
-        return acessibilidade;
-    }
-    
-    public void setAcessibilidade(boolean acessibilidade) {
-        this.acessibilidade = acessibilidade;
-    }
-    
-    public TipoSala getTipoSala() {
-        return tipoSala;
-    }
-    
-    public void setTipoSala(TipoSala tipoSala) {
-        this.tipoSala = tipoSala;
-    }
-    
+
     public boolean isAtivo() {
         return ativo;
     }
-    
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    // Setters
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setTipoSala(String tipoSala) {
+        this.tipoSala = tipoSala;
+    }
+
+    public void setCapacidade(int capacidade) {
+        this.capacidade = capacidade;
+    }
+
+    public void setConfiguracao(String configuracao) {
+        this.configuracao = configuracao;
+    }
+
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
     
     /**
@@ -128,14 +122,14 @@ public class Sala {
      * Método para verificar se a sala tem acessibilidade para cadeira de rodas
      */
     public boolean temAcessoCadeiraRodas() {
-        return acessibilidade;
+        return true; // Assuming all types of rooms are accessible
     }
     
     /**
      * Método para obter informações de acessibilidade formatadas
      */
     public String getInfoAcessibilidade() {
-        return acessibilidade ? "Acessível para cadeira de rodas" : "Não acessível para cadeira de rodas";
+        return "Acessível para cadeira de rodas";
     }
     
     /**
@@ -155,12 +149,13 @@ public class Sala {
     @Override
     public String toString() {
         return "Sala{" +
-                "idSala=" + idSala +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", tipoSala=" + tipoSala +
                 ", capacidade=" + capacidade +
                 ", configuracao='" + configuracao + '\'' +
-                ", acessibilidade=" + getInfoAcessibilidade() +
-                ", tipoSala=" + tipoSala.getDescricao() +
-                ", ativo=" + getStatusSala() +
+                ", ativo=" + ativo +
+                ", descricao='" + descricao + '\'' +
                 '}';
     }
     
@@ -170,11 +165,11 @@ public class Sala {
         if (obj == null || getClass() != obj.getClass()) return false;
         
         Sala sala = (Sala) obj;
-        return idSala == sala.idSala;
+        return id == sala.id;
     }
     
     @Override
     public int hashCode() {
-        return Integer.hashCode(idSala);
+        return Integer.hashCode(id);
     }
 } 

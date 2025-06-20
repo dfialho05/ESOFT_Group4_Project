@@ -278,13 +278,13 @@ public class Bilhete {
      * Calcula o preço total do bilhete baseado no número de lugares e tipo de sala
      */
     private void calcularPrecoTotal() {
-        if (sessao == null || sessao.getSala() == null) {
+        if (sessao == null) {
             this.precoTotal = 0.0;
             return;
         }
         
-        // Obtém o preço baseado no tipo de sala
-        double precoPorLugar = PrecosBilhetes.getPreco(sessao.getSala().getTipoSala());
+        // Obtém o preço baseado na sessão
+        double precoPorLugar = sessao.getPrecoBilhete();
         this.precoTotal = lugares.size() * precoPorLugar;
     }
     
@@ -292,10 +292,10 @@ public class Bilhete {
      * Obtém o preço por lugar baseado no tipo de sala
      */
     public double getPrecoPorLugar() {
-        if (sessao == null || sessao.getSala() == null) {
+        if (sessao == null) {
             return 0.0;
         }
-        return PrecosBilhetes.getPreco(sessao.getSala().getTipoSala());
+        return sessao.getPrecoBilhete();
     }
     
     /**
@@ -409,7 +409,7 @@ public class Bilhete {
         if (sessao == null || sessao.getSala() == null) {
             return "N/A";
         }
-        return "Sala " + sessao.getSala().getIdSala() + " (" + sessao.getSala().getTipoSala().getDescricao() + ")";
+        return "Sala " + sessao.getSala().getId() + " (" + sessao.getSala().getTipoSala() + ")";
     }
     
     /**

@@ -134,23 +134,22 @@ public class Sessao {
     }
     
     /**
-     * Obtém o preço do bilhete baseado no tipo de sala
+     * Obtém o preço do bilhete baseado no preço de aluguer do filme.
      */
     public double getPrecoBilhete() {
-        if (sala == null) {
+        if (filme == null) {
             return 0.0;
         }
-        return PrecosBilhetes.getPreco(sala.getTipoSala());
+        // O preço da sessão pode ter um acréscimo baseado na sala (ex: VIP)
+        // Por agora, vamos usar o preço base do filme.
+        return filme.getPrecoAluguer();
     }
     
     /**
      * Obtém o preço do bilhete formatado
      */
     public String getPrecoBilheteFormatado() {
-        if (sala == null) {
-            return "0.00 €";
-        }
-        return PrecosBilhetes.getPrecoFormatado(sala.getTipoSala());
+        return String.format("%.2f €", getPrecoBilhete());
     }
     
     // Métodos de gestão da matriz de lugares
@@ -720,11 +719,11 @@ public class Sessao {
     public String toString() {
         return "Sessao{" +
                 "idSessao=" + idSessao +
-                ", filme='" + (filme != null ? filme.getTitulo() : "N/A") + '\'' +
-                ", sala=" + (sala != null ? sala.getIdSala() : "N/A") +
-                ", periodo=" + getPeriodoAtividadeFormatado() +
-                ", horario=" + getHorarioCompletoFormatado() +
-                ", precoBilhete=" + getPrecoBilheteFormatado() +
+                ", filme=" + (filme != null ? filme.getTitulo() : "N/A") +
+                ", sala=" + (sala != null ? sala.getId() : "N/A") +
+                ", dataInicio=" + dataInicio +
+                ", dataFim=" + dataFim +
+                ", horario=" + horario +
                 ", ativo=" + ativo +
                 '}';
     }
