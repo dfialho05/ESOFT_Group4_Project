@@ -13,22 +13,23 @@ public class MainPag {
     private JPanel contentPanel;
     private JLabel logoLabel;
 
-    public MainPag(Cinema cinema) {
+    public MainPag(Cinema cinema, Runnable onGestaoClick) {
         this.cinema = cinema;
         logoLabel.setText("");
         try {
-            ImageIcon logoIcon = new ImageIcon(getClass().getResource("/logo.png"));
+            java.net.URL logoUrl = getClass().getResource("/logo.png");
+            System.out.println("Tentando carregar o logo de: " + logoUrl); // Debug
+            ImageIcon logoIcon = new ImageIcon(logoUrl);
             Image image = logoIcon.getImage();
             Image newimg = image.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH);
             logoIcon = new ImageIcon(newimg);
             logoLabel.setIcon(logoIcon);
         } catch (Exception e) {
-            logoLabel.setText("Logo");
+            logoLabel.setText("Logo não encontrado");
+            e.printStackTrace(); // Print detailed error
         }
 
-        gestaoButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(mainPanel, "A janela 'Gestão' será aberta aqui.");
-        });
+        gestaoButton.addActionListener(e -> onGestaoClick.run());
 
         vendasButton.addActionListener(e -> {
             JOptionPane.showMessageDialog(mainPanel, "A janela 'Vendas' será aberta aqui.");
