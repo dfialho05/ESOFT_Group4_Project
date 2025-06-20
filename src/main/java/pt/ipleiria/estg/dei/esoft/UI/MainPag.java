@@ -1,30 +1,32 @@
 package pt.ipleiria.estg.dei.esoft.UI;
 
+import pt.ipleiria.estg.dei.esoft.Backend.Cinema;
 import javax.swing.*;
 
 public class MainPag {
+    private JPanel mainPanel;
     private JButton gestaoButton;
     private JButton vendasButton;
     private JButton consultaButton;
+    private final Cinema cinema;
 
-    public MainPag() {
+    public MainPag(Cinema cinema) {
+        this.cinema = cinema;
+
         gestaoButton.addActionListener(e -> {
-            // Action for gestaoButton
-            // I want this to go to GestaoPag
-            System.out.println("Gestao button clicked");
-            GestaoPag gestaoPag = new GestaoPag();
-            JFrame frame = new JFrame("Gestao Page");
-            frame.setContentPane(gestaoPag.getMainPanel());
+            JOptionPane.showMessageDialog(mainPanel, "A janela 'Gestão' será aberta aqui.");
         });
 
         vendasButton.addActionListener(e -> {
-            // Action for vendasButton
-            System.out.println("Vendas button clicked");
+            JOptionPane.showMessageDialog(mainPanel, "A janela 'Vendas' será aberta aqui.");
         });
 
         consultaButton.addActionListener(e -> {
-            // Action for consultaButton
-            System.out.println("Consulta button clicked");
+            JOptionPane.showMessageDialog(mainPanel, "A janela 'Consulta' será aberta aqui.");
         });
+    }
+
+    public JPanel getMainPanel() {
+        return mainPanel;
     }
 }
