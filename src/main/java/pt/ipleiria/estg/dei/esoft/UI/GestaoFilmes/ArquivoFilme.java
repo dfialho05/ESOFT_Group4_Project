@@ -124,5 +124,7 @@ public class ArquivoFilme extends JFrame {
 
     private void createUIComponents() {
         moviesPanel = new JPanel();
+        moviesPanel.setOpaque(true);
+        moviesPanel.setBackground(new Color(0x2d3c42));
     }
 }

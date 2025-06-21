@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="pt.ipleiria.estg.dei.esoft.UI.GestaoFilmes.GestaoFilmeMain">
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="pt.ipleiria.estg.dei.esoft.UI.MainPag">
   <grid id="27dc6" binding="mainPanel" layout-manager="GridLayoutManager" row-count="3" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
@@ -30,7 +30,7 @@
           <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
         </constraints>
       </vspacer>
-      <grid id="a213a" layout-manager="GridLayoutManager" row-count="4" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="a213a" binding="contentPanel" layout-manager="GridLayoutManager" row-count="4" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="20" left="20" bottom="20" right="20"/>
         <constraints>
           <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -49,10 +49,20 @@
             <properties>
               <font name="SansSerif" size="48" style="1"/>
               <foreground color="-1"/>
-              <text value="CinemaLiz - Filmes"/>
+              <text value="CinemaLiz"/>
             </properties>
           </component>
-          <component id="bffdd" class="javax.swing.JButton" binding="pesquisaDeFilmesButton">
+          <component id="e2c73" class="javax.swing.JLabel" binding="logoLabel">
+            <constraints>
+              <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font size="20"/>
+              <foreground color="-1"/>
+              <text value="[LOGO]"/>
+            </properties>
+          </component>
+          <component id="10f67" class="javax.swing.JButton" binding="gestaoButton">
             <constraints>
               <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="50"/>
@@ -62,10 +72,10 @@
               <background color="-16752737"/>
               <font size="24"/>
               <foreground color="-1"/>
-              <text value="Pesquisa de Filmes"/>
+              <text value="Gestão"/>
             </properties>
           </component>
-          <component id="a7488" class="javax.swing.JButton" binding="registoDeFilmeButton">
+          <component id="cf8bb" class="javax.swing.JButton" binding="vendasButton">
             <constraints>
               <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="50"/>
@@ -75,10 +85,10 @@
               <background color="-16752737"/>
               <font size="24"/>
               <foreground color="-1"/>
-              <text value="Registo de Filme"/>
+              <text value="Vendas"/>
             </properties>
           </component>
-          <component id="13693" class="javax.swing.JButton" binding="arquivoButton">
+          <component id="6c823" class="javax.swing.JButton" binding="consultaButton">
             <constraints>
               <grid row="2" column="1" row-span="1" col-span="3" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
                 <preferred-size width="150" height="50"/>
@@ -88,7 +98,7 @@
               <background color="-16752737"/>
               <font size="24"/>
               <foreground color="-1"/>
-              <text value="Arquivo"/>
+              <text value="Consulta"/>
             </properties>
           </component>
           <vspacer id="dfa64">
@@ -115,16 +125,6 @@
               <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
           </hspacer>
-          <component id="9b9e8" class="javax.swing.JButton" binding="logoButton">
-            <constraints>
-              <grid row="3" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <background color="-16742214"/>
-              <enabled value="true"/>
-              <text value=""/>
-            </properties>
-          </component>
         </children>
       </grid>
     </children>

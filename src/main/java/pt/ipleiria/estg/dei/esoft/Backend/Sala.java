@@ -172,4 +172,8 @@ public class Sala {
     public int hashCode() {
         return Integer.hashCode(id);
     }
-} 
+
+    public boolean isAtiva() {
+        return ativo;
+    }
+}

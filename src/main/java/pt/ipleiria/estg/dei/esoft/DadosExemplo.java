@@ -16,9 +16,11 @@ public class DadosExemplo {
      * @return Uma instância de Cinema com dados para demonstração.
      */
     public static Cinema criarCinemaComExemplos() {
+        System.out.println("Criando cinema com dados de exemplo...");
         Cinema cinema = new Cinema();
 
         // 1. Adicionar Salas (incluindo algumas desativadas)
+        System.out.println("Criando salas...");
         Sala sala1 = new Sala(1, "Sala 1", "Normal", 100, "10x10", true, "");
         Sala sala2 = new Sala(2, "Sala 2", "Normal", 80, "8x10", true, "");
         Sala salaVIP = new Sala(3, "Sala VIP", "VIP", 40, "5x8", true, "Assentos reclináveis");
@@ -36,8 +38,10 @@ public class DadosExemplo {
         cinema.adicionarSala(salaAntiga);
         cinema.adicionarSala(salaPremium);
         cinema.adicionarSala(salaInfantil);
+        System.out.println("8 salas criadas e adicionadas ao cinema");
 
         // 2. Adicionar Filmes (mais variedade)
+        System.out.println("Criando filmes...");
         Filme filmeAcao = new Filme("Velocidade Furiosa X", "Ação", 141, "Dom Toretto e sua família enfrentam o vilão mais letal que já encontraram.", 8.50, 2023, "M/12", true, 1, 30);
         Filme filmeComedia = new Filme("Agentes Secundários", "Comédia", 107, "Uma comédia hilariante sobre agentes secretos incompetentes.", 7.00, 2010, "M/12", true, 1, 30);
         Filme filmeAnimacao = new Filme("Super Mario Bros.", "Animação", 92, "A aventura épica do Mario e Luigi no mundo real.", 7.50, 2023, "M/6", true, 1, 30);
@@ -59,8 +63,10 @@ public class DadosExemplo {
         cinema.adicionarFilme(filmeDocumentario);
         cinema.adicionarFilme(filmeAntigo);
         cinema.adicionarFilme(filmeInfantil);
+        System.out.println("10 filmes criados e adicionados ao cinema");
 
         // 3. Adicionar Sessões (mais variedade de horários e salas)
+        System.out.println("Criando sessões...");
         Sessao sessaoAcao = new Sessao(1, filmeAcao, sala1, LocalDate.now().minusDays(10), LocalDate.now().plusDays(10), LocalTime.of(21, 30));
         Sessao sessaoComedia = new Sessao(2, filmeComedia, sala2, LocalDate.now().minusDays(5), LocalDate.now().plusDays(20), LocalTime.of(19, 0));
         Sessao sessaoAnimacao = new Sessao(3, filmeAnimacao, salaVIP, LocalDate.now(), LocalDate.now().plusDays(30), LocalTime.of(16, 0));
@@ -82,8 +88,10 @@ public class DadosExemplo {
         cinema.adicionarSessao(sessaoDocumentario);
         cinema.adicionarSessao(sessaoInfantil);
         cinema.adicionarSessao(sessaoAcao2);
+        System.out.println("10 sessões criadas e adicionadas ao cinema");
 
         // 4. Adicionar Produtos de Bar (mais variedade)
+        System.out.println("Criando produtos de bar...");
         ProdutoBar pipocas = new ProdutoBar(1, "Pipocas Grandes", "Snack", 4.50, 100, 10);
         ProdutoBar refri = new ProdutoBar(2, "Refrigerante", "Bebida", 2.50, 200, 20);
         ProdutoBar chocolate = new ProdutoBar(3, "Chocolate", "Doce", 1.80, 50, 5); // Stock baixo para teste de alerta
@@ -105,8 +113,10 @@ public class DadosExemplo {
         cinema.adicionarProdutoBar(gelado);
         cinema.adicionarProdutoBar(sumo);
         cinema.adicionarProdutoBar(nachos);
+        System.out.println("10 produtos de bar criados e adicionados ao cinema");
 
         // 5. Adicionar Menus (mais variedade)
+        System.out.println("Criando menus...");
         GestaoMenus gestaoMenus = cinema.getGestaoMenus();
         
         Menu menuFamilia = gestaoMenus.criarMenu("Menu Família", "2 Pipocas e 2 Refrigerantes");
@@ -128,8 +138,10 @@ public class DadosExemplo {
         gestaoMenus.adicionarProdutoAoMenu(menuPremium.getIdMenu(), pipocas, 1);
         gestaoMenus.adicionarProdutoAoMenu(menuPremium.getIdMenu(), cafe, 1);
         gestaoMenus.adicionarProdutoAoMenu(menuPremium.getIdMenu(), chocolate, 1);
+        System.out.println("4 menus criados e adicionados ao cinema");
 
         // 6. Registar Vendas (simulação mais completa)
+        System.out.println("Criando vendas...");
         // Venda de ontem
         Venda venda1 = new Venda(1, LocalDateTime.now().minusDays(1));
         Bilhete b1 = new Bilhete(1, sessaoAcao);
@@ -174,7 +186,9 @@ public class DadosExemplo {
         venda6.adicionarBilhete(b6);
         venda6.adicionarMenu(menuPremium);
         cinema.registarVenda(venda6);
+        System.out.println("6 vendas criadas e registadas no cinema");
 
+        System.out.println("Cinema criado com sucesso com todos os dados de exemplo!");
         return cinema;
     }
 }

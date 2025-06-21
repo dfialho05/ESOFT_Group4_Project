@@ -174,7 +174,11 @@ public class PesquisaFilme extends JFrame {
     }
 
     private void createUIComponents() {
-        // moviesPanel needs to be initialized before it's used in the form
+        // moviesPanel precisa de ser inicializado aqui por ser "custom-create"
         moviesPanel = new JPanel();
+        // Garantir que o painel é visível
+        moviesPanel.setOpaque(true);
+        // Usar a mesma cor de fundo que o painel principal para um look consistente
+        moviesPanel.setBackground(new Color(0x2d3c42));
     }
 }

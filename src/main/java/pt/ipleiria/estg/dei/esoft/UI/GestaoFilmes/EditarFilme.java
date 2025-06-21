@@ -26,16 +26,31 @@ public class EditarFilme extends JFrame {
         this.filme = filme;
         this.onFilmeUpdated = onFilmeUpdated;
 
+        // Initialize UI components first
+        createUIComponents();
+
         setTitle("CinemaLiz - Editar Filme");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(800, 600);
         setLocationRelativeTo(null);
-        setContentPane(mainPanel);
+        
+        if (mainPanel != null) {
+            setContentPane(mainPanel);
+        }
 
         populateFilmeData();
 
-        editarButton.addActionListener(e -> saveChanges());
-        cancelarButton.addActionListener(e -> dispose());
+        if (editarButton != null) {
+            editarButton.addActionListener(e -> saveChanges());
+        }
+        if (cancelarButton != null) {
+            cancelarButton.addActionListener(e -> dispose());
+        }
+    }
+
+    private void createUIComponents() {
+        // Initialize any custom components if needed
+        // The form components are automatically bound
     }
 
     private void populateFilmeData() {

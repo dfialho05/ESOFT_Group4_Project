@@ -15,29 +15,41 @@ public class MainPag {
 
     public MainPag(Cinema cinema, Runnable onGestaoClick) {
         this.cinema = cinema;
-        logoLabel.setText("");
-        try {
-            java.net.URL logoUrl = getClass().getResource("/logo.png");
-            System.out.println("Tentando carregar o logo de: " + logoUrl); // Debug
-            ImageIcon logoIcon = new ImageIcon(logoUrl);
-            Image image = logoIcon.getImage();
-            Image newimg = image.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH);
-            logoIcon = new ImageIcon(newimg);
-            logoLabel.setIcon(logoIcon);
-        } catch (Exception e) {
-            logoLabel.setText("Logo não encontrado");
-            e.printStackTrace(); // Print detailed error
+        
+        // Initialize UI components first
+        createUIComponents();
+        
+        if (logoLabel != null) {
+            logoLabel.setText("");
+            try {
+                java.net.URL logoUrl = getClass().getResource("/logo.png");
+                System.out.println("Tentando carregar o logo de: " + logoUrl); // Debug
+                ImageIcon logoIcon = new ImageIcon(logoUrl);
+                Image image = logoIcon.getImage();
+                Image newimg = image.getScaledInstance(100, 100, java.awt.Image.SCALE_SMOOTH);
+                logoIcon = new ImageIcon(newimg);
+                logoLabel.setIcon(logoIcon);
+            } catch (Exception e) {
+                logoLabel.setText("Logo não encontrado");
+                e.printStackTrace(); // Print detailed error
+            }
         }
 
-        gestaoButton.addActionListener(e -> onGestaoClick.run());
+        if (gestaoButton != null) {
+            gestaoButton.addActionListener(e -> onGestaoClick.run());
+        }
 
-        vendasButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(mainPanel, "A janela 'Vendas' será aberta aqui.");
-        });
+        if (vendasButton != null) {
+            vendasButton.addActionListener(e -> {
+                JOptionPane.showMessageDialog(mainPanel, "A janela 'Vendas' será aberta aqui.");
+            });
+        }
 
-        consultaButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(mainPanel, "A janela 'Consulta' será aberta aqui.");
-        });
+        if (consultaButton != null) {
+            consultaButton.addActionListener(e -> {
+                JOptionPane.showMessageDialog(mainPanel, "A janela 'Consulta' será aberta aqui.");
+            });
+        }
     }
 
     public JPanel getMainPanel() {
@@ -45,6 +57,12 @@ public class MainPag {
     }
 
     private void createUIComponents() {
+        // Fallback para inicializar o mainPanel se o form designer falhar
+        if (mainPanel == null) {
+            mainPanel = new JPanel(new BorderLayout());
+            mainPanel.setBackground(new Color(0x3B82F6)); // Cor de fundo principal
+        }
+        
         contentPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -56,11 +74,6 @@ public class MainPag {
                 g2d.dispose();
             }
         };
-
-        gestaoButton = createRoundedButton("Gestão");
-        vendasButton = createRoundedButton("Vendas");
-        consultaButton = createRoundedButton("Consulta");
-        logoLabel = new JLabel();
     }
 
     private JButton createRoundedButton(String text) {
