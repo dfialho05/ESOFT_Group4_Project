@@ -24,7 +24,8 @@ public class PesquisaFilme {
         this.cinema = cinema;
         this.onBack = onBack;
         
-        // Setup components after they are initialized
+        createUIComponents(); // Chamar para construir a UI
+
         SwingUtilities.invokeLater(() -> {
             loadActiveMovies();
             if (backButton != null) {
@@ -196,11 +197,67 @@ public class PesquisaFilme {
     }
 
     private void createUIComponents() {
-        // moviesPanel precisa de ser inicializado aqui por ser "custom-create"
+        // Main panel
+        mainPanel = new JPanel(new BorderLayout(0, 15));
+        mainPanel.setBackground(new Color(0x2d3c42));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        // Title
+        JLabel titleLabel = new JLabel("🔍 Pesquisa de Filmes", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 36));
+        titleLabel.setForeground(Color.WHITE);
+        mainPanel.add(titleLabel, BorderLayout.NORTH);
+
+        // Container panel for controls and list
+        JPanel contentPanel = new JPanel(new BorderLayout(0, 15));
+        contentPanel.setOpaque(false);
+
+        // Top controls panel
+        JPanel topControls = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
+        topControls.setOpaque(false);
+
+        backButton = new JButton("🏠 Voltar");
+        styleButton(backButton);
+        filterAZButton = new JButton("A-Z ↓");
+        styleButton(filterAZButton);
+        filterZAButton = new JButton("Z-A ↑");
+        styleButton(filterZAButton);
+        filterGenreButton = new JButton("🎭 Gênero");
+        styleButton(filterGenreButton);
+        filterClassificationButton = new JButton("🔞 Classificação");
+        styleButton(filterClassificationButton);
+        filterYearButton = new JButton("📅 Ano");
+        styleButton(filterYearButton);
+
+        topControls.add(backButton);
+        topControls.add(filterAZButton);
+        topControls.add(filterZAButton);
+        topControls.add(filterGenreButton);
+        topControls.add(filterClassificationButton);
+        topControls.add(filterYearButton);
+        contentPanel.add(topControls, BorderLayout.NORTH);
+
+        // Movies panel with scroll
         moviesPanel = new JPanel();
-        // Garantir que o painel é visível
         moviesPanel.setOpaque(true);
-        // Usar a mesma cor de fundo que o painel principal para um look consistente
         moviesPanel.setBackground(new Color(0x2d3c42));
+        moviesPanel.setLayout(new BoxLayout(moviesPanel, BoxLayout.Y_AXIS));
+
+        scrollPane = new JScrollPane(moviesPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        contentPanel.add(scrollPane, BorderLayout.CENTER);
+
+        mainPanel.add(contentPanel, BorderLayout.CENTER);
+    }
+
+    private void styleButton(JButton button) {
+        button.setFont(new Font("SansSerif", Font.BOLD, 12));
+        button.setBackground(new Color(0x0091D5));
+        button.setForeground(Color.WHITE);
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
     }
 }

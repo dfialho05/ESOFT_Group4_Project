@@ -18,6 +18,7 @@ import pt.ipleiria.estg.dei.esoft.UI.GestaoSessoes.SessoesAtivasPag;
 import pt.ipleiria.estg.dei.esoft.UI.GestaoSessoes.ArquivoSessoesPag;
 import pt.ipleiria.estg.dei.esoft.UI.GestaoSessoes.AlugarFilmePag;
 import pt.ipleiria.estg.dei.esoft.UI.MainPag;
+import pt.ipleiria.estg.dei.esoft.UI.Vendas.VendasPag;
 
 import javax.swing.*;
 import java.awt.*;
@@ -65,7 +66,7 @@ public class Main {
 
     public static void mostrarMainPag() {
         try {
-            MainPag mainPag = new MainPag(cinema, Main::mostrarGestaoPag);
+            MainPag mainPag = new MainPag(cinema, Main::mostrarGestaoPag, Main::mostrarVendasPag);
             JPanel panel = mainPag.getMainPanel();
             
             if (panel == null) {
@@ -420,6 +421,26 @@ public class Main {
             System.err.println("Erro ao mostrar AlugarFilmePag: " + e.getMessage());
             e.printStackTrace();
             mostrarGestaoSessaoMain(); // Fallback to gestão sessões page
+        }
+    }
+
+    public static void mostrarVendasPag() {
+        try {
+            VendasPag vendasPag = new VendasPag(cinema, Main::mostrarMainPag);
+            JPanel panel = vendasPag.getMainPanel();
+            
+            if (panel == null) {
+                System.err.println("Erro: mainPanel é null na VendasPag");
+                panel = createFallbackPanel("Erro ao carregar Página de Vendas");
+            }
+            
+            frame.setContentPane(panel);
+            frame.revalidate();
+            frame.repaint();
+        } catch (Exception e) {
+            System.err.println("Erro ao mostrar VendasPag: " + e.getMessage());
+            e.printStackTrace();
+            mostrarMainPag(); // Fallback to main page
         }
     }
 

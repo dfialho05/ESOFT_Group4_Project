@@ -122,22 +122,26 @@ public class DadosExemplo {
         Menu menuFamilia = gestaoMenus.criarMenu("Menu Família", "2 Pipocas e 2 Refrigerantes");
         gestaoMenus.adicionarProdutoAoMenu(menuFamilia.getIdMenu(), pipocas, 2);
         gestaoMenus.adicionarProdutoAoMenu(menuFamilia.getIdMenu(), refri, 2);
+        cinema.adicionarMenu(menuFamilia);
         
         Menu menuCasal = gestaoMenus.criarMenu("Menu Casal", "2 Pipocas, 2 Bebidas e 1 Chocolate");
         gestaoMenus.adicionarProdutoAoMenu(menuCasal.getIdMenu(), pipocas, 2);
         gestaoMenus.adicionarProdutoAoMenu(menuCasal.getIdMenu(), refri, 1);
         gestaoMenus.adicionarProdutoAoMenu(menuCasal.getIdMenu(), agua, 1);
         gestaoMenus.adicionarProdutoAoMenu(menuCasal.getIdMenu(), chocolate, 1);
+        cinema.adicionarMenu(menuCasal);
         
         Menu menuInfantil = gestaoMenus.criarMenu("Menu Infantil", "1 Pipoca Pequena, 1 Sumo e 1 Gelado");
         gestaoMenus.adicionarProdutoAoMenu(menuInfantil.getIdMenu(), pipocasPequenas, 1);
         gestaoMenus.adicionarProdutoAoMenu(menuInfantil.getIdMenu(), sumo, 1);
         gestaoMenus.adicionarProdutoAoMenu(menuInfantil.getIdMenu(), gelado, 1);
+        cinema.adicionarMenu(menuInfantil);
         
         Menu menuPremium = gestaoMenus.criarMenu("Menu Premium", "1 Pipoca Grande, 1 Bebida Premium e 1 Doce");
         gestaoMenus.adicionarProdutoAoMenu(menuPremium.getIdMenu(), pipocas, 1);
         gestaoMenus.adicionarProdutoAoMenu(menuPremium.getIdMenu(), cafe, 1);
         gestaoMenus.adicionarProdutoAoMenu(menuPremium.getIdMenu(), chocolate, 1);
+        cinema.adicionarMenu(menuPremium);
         System.out.println("4 menus criados e adicionados ao cinema");
 
         // 6. Registar Vendas (simulação mais completa)

@@ -20,6 +20,8 @@ public class ArquivoSessoesPag {
         this.cinema = cinema;
         this.voltarCallback = voltarCallback;
         
+        createUIComponents(); // Chamar para construir a UI
+
         // Setup components after they are initialized
         SwingUtilities.invokeLater(() -> {
             if (voltarButton != null) {
@@ -95,5 +97,54 @@ public class ArquivoSessoesPag {
         card.add(buttonPanel, BorderLayout.EAST);
 
         return card;
+    }
+
+    private void createUIComponents() {
+        // Main panel
+        mainPanel = new JPanel(new BorderLayout(0, 15));
+        mainPanel.setBackground(new Color(0x2d3c42));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        // Title
+        JLabel titleLabel = new JLabel("🗄️ Arquivo de Sessões", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 36));
+        titleLabel.setForeground(Color.WHITE);
+        mainPanel.add(titleLabel, BorderLayout.NORTH);
+
+        // Container panel for controls and list
+        JPanel contentPanel = new JPanel(new BorderLayout(0, 15));
+        contentPanel.setOpaque(false);
+
+        // Top controls panel
+        JPanel topControls = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
+        topControls.setOpaque(false);
+
+        voltarButton = new JButton("🏠 Voltar");
+        styleButton(voltarButton);
+        topControls.add(voltarButton);
+        contentPanel.add(topControls, BorderLayout.NORTH);
+
+        // Sessions panel with scroll
+        sessoesPanel = new JPanel();
+        sessoesPanel.setOpaque(true);
+        sessoesPanel.setBackground(new Color(0x2d3c42));
+        sessoesPanel.setLayout(new BoxLayout(sessoesPanel, BoxLayout.Y_AXIS));
+
+        scrollPane = new JScrollPane(sessoesPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        contentPanel.add(scrollPane, BorderLayout.CENTER);
+
+        mainPanel.add(contentPanel, BorderLayout.CENTER);
+    }
+
+    private void styleButton(JButton button) {
+        button.setFont(new Font("SansSerif", Font.BOLD, 12));
+        button.setBackground(new Color(0x0091D5));
+        button.setForeground(Color.WHITE);
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
     }
 } 

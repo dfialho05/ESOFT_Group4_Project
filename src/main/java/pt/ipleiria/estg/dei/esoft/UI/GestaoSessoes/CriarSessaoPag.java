@@ -36,43 +36,10 @@ public class CriarSessaoPag {
         this.cinema = cinema;
         this.onBack = onBack;
 
+        createUIComponents(); // Chamar para construir a UI
+
         // Setup components after they are initialized
         SwingUtilities.invokeLater(() -> {
-            // Inicializar componentes manualmente se necessário
-            if (mainPanel == null) {
-                mainPanel = new JPanel();
-            }
-            if (anoValue == null) {
-                anoValue = new JLabel();
-            }
-            if (criarSessaoButton == null) {
-                criarSessaoButton = new JButton("Criar Sessão");
-            }
-            if (voltarButton == null) {
-                voltarButton = new JButton("Voltar");
-            }
-            if (hora12CheckBox == null) {
-                hora12CheckBox = new JCheckBox("12:00");
-            }
-            if (hora16CheckBox == null) {
-                hora16CheckBox = new JCheckBox("16:00");
-            }
-            if (hora18CheckBox == null) {
-                hora18CheckBox = new JCheckBox("18:00");
-            }
-            if (hora21CheckBox == null) {
-                hora21CheckBox = new JCheckBox("21:00");
-            }
-            if (dataInicioField == null) {
-                dataInicioField = new JTextField();
-            }
-            if (dataFimField == null) {
-                dataFimField = new JTextField();
-            }
-            if (filmeComboBox == null) {
-                filmeComboBox = new JComboBox<>();
-            }
-
             // Custom renderer for JComboBox to show only movie title
             if (filmeComboBox != null) {
                 filmeComboBox.setRenderer(new FilmeComboBoxRenderer());
@@ -122,6 +89,117 @@ public class CriarSessaoPag {
                 voltarButton.addActionListener(e -> onBack.run());
             }
         });
+    }
+
+    private void createUIComponents() {
+        // Main panel
+        mainPanel = new JPanel(new BorderLayout(0, 15));
+        mainPanel.setBackground(new Color(0x2d3c42));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        // Title
+        JLabel titleLabel = new JLabel("➕ Criar Nova Sessão", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 36));
+        titleLabel.setForeground(Color.WHITE);
+        mainPanel.add(titleLabel, BorderLayout.NORTH);
+
+        // Form panel
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        formPanel.setOpaque(false);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.WEST;
+
+        // Filme selection
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        formPanel.add(createLabel("Filme:"), gbc);
+        filmeComboBox = new JComboBox<>();
+        gbc.gridx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        formPanel.add(filmeComboBox, gbc);
+
+        // Ano label
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        formPanel.add(createLabel("Ano:"), gbc);
+        anoValue = new JLabel("--");
+        anoValue.setForeground(Color.WHITE);
+        anoValue.setFont(new Font("SansSerif", Font.BOLD, 14));
+        gbc.gridx = 1;
+        formPanel.add(anoValue, gbc);
+
+        // Data início
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        formPanel.add(createLabel("Data Início (dd-mm-yyyy):"), gbc);
+        dataInicioField = new JTextField(20);
+        gbc.gridx = 1;
+        formPanel.add(dataInicioField, gbc);
+
+        // Data fim
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        formPanel.add(createLabel("Data Fim (dd-mm-yyyy):"), gbc);
+        dataFimField = new JTextField(20);
+        gbc.gridx = 1;
+        formPanel.add(dataFimField, gbc);
+
+        // Horários
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        formPanel.add(createLabel("Horário:"), gbc);
+        JPanel horariosPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        horariosPanel.setOpaque(false);
+        hora12CheckBox = new JCheckBox("12:00");
+        hora16CheckBox = new JCheckBox("16:00");
+        hora18CheckBox = new JCheckBox("18:00");
+        hora21CheckBox = new JCheckBox("21:00");
+        styleCheckBox(hora12CheckBox);
+        styleCheckBox(hora16CheckBox);
+        styleCheckBox(hora18CheckBox);
+        styleCheckBox(hora21CheckBox);
+        horariosPanel.add(hora12CheckBox);
+        horariosPanel.add(hora16CheckBox);
+        horariosPanel.add(hora18CheckBox);
+        horariosPanel.add(hora21CheckBox);
+        gbc.gridx = 1;
+        formPanel.add(horariosPanel, gbc);
+
+        mainPanel.add(formPanel, BorderLayout.CENTER);
+
+        // Buttons
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+        buttonPanel.setOpaque(false);
+        voltarButton = new JButton("🏠 Voltar");
+        styleButton(voltarButton);
+        criarSessaoButton = new JButton("✅ Criar Sessão");
+        styleButton(criarSessaoButton);
+        
+        buttonPanel.add(voltarButton);
+        buttonPanel.add(criarSessaoButton);
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+    }
+
+    private JLabel createLabel(String text) {
+        JLabel label = new JLabel(text);
+        label.setFont(new Font("SansSerif", Font.BOLD, 14));
+        label.setForeground(Color.WHITE);
+        return label;
+    }
+
+    private void styleButton(JButton button) {
+        button.setFont(new Font("SansSerif", Font.BOLD, 12));
+        button.setBackground(new Color(0x0091D5));
+        button.setForeground(Color.WHITE);
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
+    }
+
+    private void styleCheckBox(JCheckBox checkBox) {
+        checkBox.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        checkBox.setForeground(Color.WHITE);
+        checkBox.setOpaque(false);
     }
 
     private void updateAnoLancamento() {

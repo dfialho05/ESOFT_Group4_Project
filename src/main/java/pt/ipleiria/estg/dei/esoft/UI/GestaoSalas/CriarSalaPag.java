@@ -4,6 +4,7 @@ import pt.ipleiria.estg.dei.esoft.Backend.Cinema;
 import pt.ipleiria.estg.dei.esoft.Backend.Sala;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,6 +29,9 @@ public class CriarSalaPag {
     public CriarSalaPag(Cinema cinema, Runnable onBack) {
         this.cinema = cinema;
         this.onBack = onBack;
+        
+        // Initialize UI components first
+        createUIComponents();
         
         // Setup components after they are initialized
         SwingUtilities.invokeLater(() -> {
@@ -67,6 +71,123 @@ public class CriarSalaPag {
         });
     }
 
+    private void createUIComponents() {
+        // Create main panel
+        mainPanel = new JPanel();
+        mainPanel.setLayout(new BorderLayout(20, 20));
+        mainPanel.setBackground(new Color(-11685428));
+        mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+        
+        // Create title
+        JLabel titleLabel = new JLabel("➕ Criar Nova Sala", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 36));
+        titleLabel.setForeground(Color.WHITE);
+        mainPanel.add(titleLabel, BorderLayout.NORTH);
+        
+        // Create form panel
+        roundedPanel = new JPanel();
+        roundedPanel.setLayout(new GridBagLayout());
+        roundedPanel.setBackground(new Color(-16752737));
+        roundedPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+        
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        
+        // Nome da Sala
+        JLabel nomeLabel = new JLabel("Nome da Sala:");
+        nomeLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
+        nomeLabel.setForeground(Color.WHITE);
+        gbc.gridx = 0; gbc.gridy = 0; gbc.anchor = GridBagConstraints.WEST;
+        roundedPanel.add(nomeLabel, gbc);
+        
+        nomeSalaField = new JTextField(20);
+        nomeSalaField.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        gbc.gridx = 1; gbc.gridy = 0; gbc.fill = GridBagConstraints.HORIZONTAL;
+        roundedPanel.add(nomeSalaField, gbc);
+        
+        // Largura
+        JLabel larguraLabel = new JLabel("Largura (colunas):");
+        larguraLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
+        larguraLabel.setForeground(Color.WHITE);
+        gbc.gridx = 0; gbc.gridy = 1; gbc.anchor = GridBagConstraints.WEST;
+        roundedPanel.add(larguraLabel, gbc);
+        
+        larguraField = new JTextField(10);
+        larguraField.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        gbc.gridx = 1; gbc.gridy = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
+        roundedPanel.add(larguraField, gbc);
+        
+        // Altura
+        JLabel alturaLabel = new JLabel("Altura (filas):");
+        alturaLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
+        alturaLabel.setForeground(Color.WHITE);
+        gbc.gridx = 0; gbc.gridy = 2; gbc.anchor = GridBagConstraints.WEST;
+        roundedPanel.add(alturaLabel, gbc);
+        
+        alturaField = new JTextField(10);
+        alturaField.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        gbc.gridx = 1; gbc.gridy = 2; gbc.fill = GridBagConstraints.HORIZONTAL;
+        roundedPanel.add(alturaField, gbc);
+        
+        // Capacidade (calculada automaticamente)
+        capacidadeLabel = new JLabel("Capacidade Total: --");
+        capacidadeLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
+        capacidadeLabel.setForeground(Color.WHITE);
+        gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2; gbc.anchor = GridBagConstraints.CENTER;
+        roundedPanel.add(capacidadeLabel, gbc);
+        
+        // Tipo de Sala
+        JLabel tipoLabel = new JLabel("Tipo de Sala:");
+        tipoLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
+        tipoLabel.setForeground(Color.WHITE);
+        gbc.gridx = 0; gbc.gridy = 4; gbc.gridwidth = 1; gbc.anchor = GridBagConstraints.WEST;
+        roundedPanel.add(tipoLabel, gbc);
+        
+        JPanel tipoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        tipoPanel.setOpaque(false);
+        normalSalaCheckBox = new JCheckBox("Normal");
+        normalSalaCheckBox.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        normalSalaCheckBox.setForeground(Color.WHITE);
+        vipSalaCheckBox = new JCheckBox("VIP");
+        vipSalaCheckBox.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        vipSalaCheckBox.setForeground(Color.WHITE);
+        tipoPanel.add(normalSalaCheckBox);
+        tipoPanel.add(vipSalaCheckBox);
+        gbc.gridx = 1; gbc.gridy = 4; gbc.fill = GridBagConstraints.HORIZONTAL;
+        roundedPanel.add(tipoPanel, gbc);
+        
+        // Acessibilidade
+        cadeiraDeRodasCheck = new JCheckBox("Acessível para cadeira de rodas");
+        cadeiraDeRodasCheck.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        cadeiraDeRodasCheck.setForeground(Color.WHITE);
+        gbc.gridx = 0; gbc.gridy = 5; gbc.gridwidth = 2; gbc.anchor = GridBagConstraints.WEST;
+        roundedPanel.add(cadeiraDeRodasCheck, gbc);
+        
+        // Buttons panel
+        JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        buttonsPanel.setOpaque(false);
+        
+        voltarButton = new JButton("❌ Cancelar");
+        voltarButton.setFont(new Font("SansSerif", Font.BOLD, 14));
+        voltarButton.setBackground(new Color(-14575885));
+        voltarButton.setForeground(Color.WHITE);
+        voltarButton.setPreferredSize(new Dimension(120, 40));
+        
+        criarSalaButton = new JButton("✅ Criar Sala");
+        criarSalaButton.setFont(new Font("SansSerif", Font.BOLD, 14));
+        criarSalaButton.setBackground(new Color(-12423373));
+        criarSalaButton.setForeground(Color.WHITE);
+        criarSalaButton.setPreferredSize(new Dimension(120, 40));
+        
+        buttonsPanel.add(voltarButton);
+        buttonsPanel.add(criarSalaButton);
+        
+        gbc.gridx = 0; gbc.gridy = 6; gbc.gridwidth = 2; gbc.anchor = GridBagConstraints.CENTER;
+        roundedPanel.add(buttonsPanel, gbc);
+        
+        mainPanel.add(roundedPanel, BorderLayout.CENTER);
+    }
+
     private void calcularCapacidade() {
         try {
             if (larguraField == null || alturaField == null || capacidadeLabel == null) {
@@ -93,6 +214,7 @@ public class CriarSalaPag {
     private void criarSala() {
         if (nomeSalaField == null || larguraField == null || alturaField == null || 
             normalSalaCheckBox == null || cadeiraDeRodasCheck == null) {
+            System.err.println("Erro: Alguns componentes são null");
             return;
         }
         
@@ -122,8 +244,15 @@ public class CriarSalaPag {
             int novoId = cinema.getSalas().size() + 1;
 
             String dimensoesStr = largura + "x" + altura;
-            Sala novaSala = new Sala(novoId, nome, tipoSala, capacidadeTotal, dimensoesStr, true, temAcessibilidades ? "Acessível para cadeira de rodas" : "");
+            String descricao = temAcessibilidades ? "Acessível para cadeira de rodas" : "";
+            
+            System.out.println("Criando sala: ID=" + novoId + ", Nome=" + nome + ", Tipo=" + tipoSala + 
+                             ", Capacidade=" + capacidadeTotal + ", Ativa=true, Descrição=" + descricao);
+            
+            Sala novaSala = new Sala(novoId, nome, tipoSala, capacidadeTotal, dimensoesStr, true, descricao);
             cinema.adicionarSala(novaSala);
+
+            System.out.println("Sala criada com sucesso! Total de salas: " + cinema.getSalas().size());
 
             JOptionPane.showMessageDialog(mainPanel, "Sala '" + nome + "' criada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             

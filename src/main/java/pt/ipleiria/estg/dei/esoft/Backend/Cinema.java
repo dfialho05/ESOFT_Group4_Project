@@ -87,6 +87,10 @@ public class Cinema {
         this.produtosBar.add(produto);
     }
     
+    public void adicionarMenu(Menu menu) {
+        this.menus.add(menu);
+    }
+    
     public void registarVenda(Venda venda) {
         this.vendas.add(venda);
     }

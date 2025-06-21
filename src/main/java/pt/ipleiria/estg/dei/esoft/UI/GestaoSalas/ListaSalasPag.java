@@ -44,11 +44,91 @@ public class ListaSalasPag {
         this.cinema = cinema;
         this.onBack = onBack;
 
+        // Initialize UI components first
+        createUIComponents();
+        
         // Setup event listeners after components are initialized
         SwingUtilities.invokeLater(() -> {
             setupEventListeners();
             loadSalas();
         });
+    }
+
+    private void createUIComponents() {
+        // Create main panel
+        mainPanel = new JPanel();
+        mainPanel.setLayout(new BorderLayout(0, 20));
+        mainPanel.setBackground(new Color(-11685428));
+        mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+        
+        // Create title
+        JLabel titleLabel = new JLabel("📋 Lista de Salas", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("SansSerif", Font.BOLD, 36));
+        titleLabel.setForeground(Color.WHITE);
+        mainPanel.add(titleLabel, BorderLayout.NORTH);
+
+        // Create a container for controls and the list
+        JPanel contentPanel = new JPanel(new BorderLayout(0, 15));
+        contentPanel.setOpaque(false);
+        
+        // Create top controls panel
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
+        topPanel.setBackground(new Color(-11685428));
+        
+        // Create buttons
+        voltarButton = new JButton("🏠 Voltar");
+        voltarButton.setFont(new Font("SansSerif", Font.BOLD, 14));
+        voltarButton.setBackground(new Color(-14575885));
+        voltarButton.setForeground(Color.WHITE);
+        voltarButton.setPreferredSize(new Dimension(120, 40));
+        
+        filtrosButton = new JButton("🔍 Limpar Filtros");
+        filtrosButton.setFont(new Font("SansSerif", Font.BOLD, 14));
+        filtrosButton.setBackground(new Color(-12423373));
+        filtrosButton.setForeground(Color.WHITE);
+        filtrosButton.setPreferredSize(new Dimension(150, 40));
+        
+        capacidadeButton = new JButton("📊 Capacidade");
+        capacidadeButton.setFont(new Font("SansSerif", Font.BOLD, 14));
+        capacidadeButton.setBackground(new Color(-12423373));
+        capacidadeButton.setForeground(Color.WHITE);
+        capacidadeButton.setPreferredSize(new Dimension(150, 40));
+        
+        tipoSalaButton = new JButton("🎬 Tipo de Sala");
+        tipoSalaButton.setFont(new Font("SansSerif", Font.BOLD, 14));
+        tipoSalaButton.setBackground(new Color(-12423373));
+        tipoSalaButton.setForeground(Color.WHITE);
+        tipoSalaButton.setPreferredSize(new Dimension(150, 40));
+        
+        acessibilidadeButton = new JButton("♿ Acessibilidade");
+        acessibilidadeButton.setFont(new Font("SansSerif", Font.BOLD, 14));
+        acessibilidadeButton.setBackground(new Color(-12423373));
+        acessibilidadeButton.setForeground(Color.WHITE);
+        acessibilidadeButton.setPreferredSize(new Dimension(150, 40));
+        
+        // Add buttons to top panel
+        topPanel.add(voltarButton);
+        topPanel.add(filtrosButton);
+        topPanel.add(capacidadeButton);
+        topPanel.add(tipoSalaButton);
+        topPanel.add(acessibilidadeButton);
+        
+        contentPanel.add(topPanel, BorderLayout.NORTH);
+        
+        // Create scrollable content panel
+        salasPanel = new JPanel();
+        salasPanel.setLayout(new BoxLayout(salasPanel, BoxLayout.Y_AXIS));
+        salasPanel.setBackground(new Color(0x0091D5));
+        
+        scrollPane = new JScrollPane(salasPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        
+        contentPanel.add(scrollPane, BorderLayout.CENTER);
+
+        mainPanel.add(contentPanel, BorderLayout.CENTER);
     }
 
     private void setupEventListeners() {
@@ -163,6 +243,7 @@ public class ListaSalasPag {
 
     public void loadSalas() {
         if (salasPanel == null) {
+            System.err.println("Erro: salasPanel é null");
             return;
         }
         
@@ -170,18 +251,30 @@ public class ListaSalasPag {
         salasPanel.setLayout(new BoxLayout(salasPanel, BoxLayout.Y_AXIS));
         salasPanel.setBackground(new Color(0x0091D5));
 
+        // Debug: verificar todas as salas
+        System.out.println("Total de salas no cinema: " + cinema.getSalas().size());
+        for (Sala sala : cinema.getSalas()) {
+            System.out.println("Sala: " + sala.getNome() + " - Ativa: " + sala.isAtivo());
+        }
+
         List<Sala> salas = cinema.getSalas().stream()
-                .filter(Sala::isAtiva)
+                .filter(Sala::isAtivo)
                 // Aplicar filtros
                 .filter(s -> filterTipoSala == null || s.getTipoSala().equalsIgnoreCase(filterTipoSala))
                 .filter(s -> {
                     if (filterTemAcessibilidade == null) {
                         return true;
                     }
-                    boolean hasAccessibility = s.getDescricao() != null && !s.getDescricao().trim().isEmpty();
+                    boolean hasAccessibility = s.getDescricao() != null && 
+                        (s.getDescricao().toLowerCase().contains("cadeira") || 
+                         s.getDescricao().toLowerCase().contains("acessível") ||
+                         s.getDescricao().toLowerCase().contains("acessibilidade") ||
+                         !s.getDescricao().trim().isEmpty());
                     return filterTemAcessibilidade.equals(hasAccessibility);
                 })
                 .collect(Collectors.toList());
+
+        System.out.println("Salas ativas encontradas: " + salas.size());
 
         // Aplicar ordenação
         switch (currentSortOrder) {
@@ -221,7 +314,7 @@ public class ListaSalasPag {
         } else {
             for (Sala sala : salas) {
                 salasPanel.add(createSalaCard(sala));
-                salasPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+                salasPanel.add(Box.createRigidArea(new Dimension(0, 10)));
             }
         }
 
@@ -236,23 +329,23 @@ public class ListaSalasPag {
                 BorderFactory.createLineBorder(new Color(207, 216, 220), 1, true),
                 new EmptyBorder(10, 10, 10, 10)
         ));
-        card.setMaximumSize(new Dimension(850, 160));
-        card.setMinimumSize(new Dimension(600, 160));
-        card.setPreferredSize(new Dimension(750, 160));
+        card.setMaximumSize(new Dimension(850, 120));
+        card.setMinimumSize(new Dimension(600, 120));
+        card.setPreferredSize(new Dimension(750, 120));
         card.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel imageLabel = new JLabel();
         try {
             ImageIcon icon = new ImageIcon(getClass().getResource("/logo.png")); 
-            Image img = icon.getImage().getScaledInstance(180, 120, Image.SCALE_SMOOTH);
+            Image img = icon.getImage().getScaledInstance(120, 80, Image.SCALE_SMOOTH);
             imageLabel.setIcon(new ImageIcon(img));
         } catch (Exception e) {
             imageLabel.setText("Imagem Indisponível");
-            imageLabel.setPreferredSize(new Dimension(180, 120));
+            imageLabel.setPreferredSize(new Dimension(120, 80));
         }
         card.add(imageLabel, BorderLayout.WEST);
 
-        JPanel detailsPanel = new JPanel(new GridLayout(0, 1, 0, 3));
+        JPanel detailsPanel = new JPanel(new GridLayout(0, 1, 0, 2));
         detailsPanel.setOpaque(false);
         detailsPanel.setBorder(new EmptyBorder(5, 0, 5, 0));
         detailsPanel.add(createDetailLabel("ID da sala: " + sala.getId()));
@@ -296,7 +389,7 @@ public class ListaSalasPag {
     
     private JLabel createDetailLabel(String text) {
         JLabel label = new JLabel(text);
-        label.setFont(new Font("Arial", Font.PLAIN, 14));
+        label.setFont(new Font("Arial", Font.PLAIN, 12));
         return label;
     }
 
