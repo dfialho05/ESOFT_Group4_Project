@@ -30,13 +30,26 @@ public class EditarSalaPag {
                 capacidadeLabel.setText(sala.getCapacidade() + " lugares");
             }
             if (acessibilidadeCheckBox != null) {
-                acessibilidadeCheckBox.setSelected(sala.getDescricao().contains("Cadeira de Rodas"));
+                acessibilidadeCheckBox.setSelected(sala.getDescricao() != null && sala.getDescricao().contains("Cadeira de Rodas"));
             }
+            
+            // Configurar checkboxes de tipo como radio buttons
             if (normalCheckBox != null && vipCheckBox != null) {
-                if (sala.getTipoSala().equals("Normal")) {
+                ButtonGroup tipoSalaGroup = new ButtonGroup();
+                tipoSalaGroup.add(normalCheckBox);
+                tipoSalaGroup.add(vipCheckBox);
+                
+                if (sala.getTipoSala() != null) {
+                    if (sala.getTipoSala().equals("Normal")) {
+                        normalCheckBox.setSelected(true);
+                    } else if (sala.getTipoSala().equals("VIP")) {
+                        vipCheckBox.setSelected(true);
+                    } else {
+                        // Default para Normal se o tipo não for reconhecido
+                        normalCheckBox.setSelected(true);
+                    }
+                } else {
                     normalCheckBox.setSelected(true);
-                } else if (sala.getTipoSala().equals("VIP")) {
-                    vipCheckBox.setSelected(true);
                 }
             }
 
@@ -45,13 +58,40 @@ public class EditarSalaPag {
                 voltarButton.addActionListener(e -> onBack.run());
             }
 
-            // Action listener para o botão de editar (ainda por implementar a lógica de guardar)
+            // Action listener para o botão de editar
             if (editarSalaButton != null) {
                 editarSalaButton.addActionListener(e -> {
                     if (mainPanel != null) {
-                        JOptionPane.showMessageDialog(mainPanel, "Lógica de guardar as alterações será implementada.", "Funcionalidade Futura", JOptionPane.INFORMATION_MESSAGE);
+                        // Validar campos obrigatórios
+                        if (nomeSalaField == null || nomeSalaField.getText().trim().isEmpty()) {
+                            JOptionPane.showMessageDialog(mainPanel, "Por favor, preencha o nome da sala.", "Erro de Validação", JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+
+                        // Obter valores dos campos
+                        String novoNome = nomeSalaField.getText().trim();
+                        boolean temAcessibilidade = acessibilidadeCheckBox != null && acessibilidadeCheckBox.isSelected();
+                        String novoTipoSala = "Normal"; // Default
+                        
+                        if (normalCheckBox != null && normalCheckBox.isSelected()) {
+                            novoTipoSala = "Normal";
+                        } else if (vipCheckBox != null && vipCheckBox.isSelected()) {
+                            novoTipoSala = "VIP";
+                        }
+
+                        // Atualizar a sala
+                        sala.setNome(novoNome);
+                        sala.setTipoSala(novoTipoSala);
+                        
+                        if (temAcessibilidade) {
+                            sala.setDescricao("Acessível para cadeira de rodas");
+                        } else {
+                            sala.setDescricao("");
+                        }
+
+                        JOptionPane.showMessageDialog(mainPanel, "Sala atualizada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                        onBack.run(); // Volta para a lista
                     }
-                    onBack.run(); // Volta para a lista
                 });
             }
         });
