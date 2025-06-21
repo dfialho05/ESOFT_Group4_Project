@@ -31,7 +31,7 @@
           <preferredSize width="50" height="50"/>
         </properties>
       </component>
-      <grid id="buttonGrid" layout-manager="GridLayoutManager" row-count="3" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="10" vgap="10">
+      <grid id="buttonGrid" layout-manager="GridLayoutManager" row-count="2" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="10" vgap="10">
         <margin top="20" left="0" bottom="0" right="0"/>
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -43,7 +43,7 @@
         <children>
           <component id="sessoesAtivasButton" class="javax.swing.JButton" binding="sessoesAtivasButton">
             <constraints>
-              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="0" row-span="1" col-span="4" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <background color="-16752737"/>
@@ -55,7 +55,7 @@
           </component>
           <component id="criarSessaoButton" class="javax.swing.JButton" binding="criarSessaoButton">
             <constraints>
-              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <background color="-16752737"/>
@@ -65,21 +65,9 @@
               <text value="Criar Sessão"/>
             </properties>
           </component>
-          <component id="arquivoButton" class="javax.swing.JButton" binding="arquivoButton">
-            <constraints>
-              <grid row="1" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-            </constraints>
-            <properties>
-              <background color="-16752737"/>
-              <font name="SansSerif" size="24"/>
-              <foreground color="-1"/>
-              <preferredSize width="150" height="50"/>
-              <text value="Arquivo"/>
-            </properties>
-          </component>
           <component id="alugarFilmeButton" class="javax.swing.JButton" binding="alugarFilmeButton">
             <constraints>
-              <grid row="2" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+              <grid row="1" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
               <background color="-16752737"/>
@@ -89,8 +77,20 @@
               <text value="Alugar Filme"/>
             </properties>
           </component>
+          <component id="arquivoButton" class="javax.swing.JButton" binding="arquivoButton">
+            <constraints>
+              <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <background color="-16752737"/>
+              <font name="SansSerif" size="24"/>
+              <foreground color="-1"/>
+              <preferredSize width="150" height="50"/>
+              <text value="Arquivo"/>
+            </properties>
+          </component>
         </children>
       </grid>
     </children>
   </grid>
-</form> 
+</form>
