@@ -1,33 +1,6 @@
 package pt.ipleiria.estg.dei.esoft.Backend;
 
 /**
- * Enum para os tipos de sala disponíveis
- */
-enum TipoSala {
-    VIP("VIP"),
-    NORMAL("Normal"),
-    TRES_D("3D"),
-    IMAX("IMAX"),
-    QUATRO_DX("4DX"),
-    XVISION("XVision");
-    
-    private final String descricao;
-    
-    TipoSala(String descricao) {
-        this.descricao = descricao;
-    }
-    
-    public String getDescricao() {
-        return descricao;
-    }
-    
-    @Override
-    public String toString() {
-        return descricao;
-    }
-}
-
-/**
  * Classe que representa uma sala de cinema no sistema
  */
 public class Sala {
