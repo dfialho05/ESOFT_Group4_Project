@@ -2,6 +2,9 @@ package pt.ipleiria.estg.dei.esoft;
 
 import pt.ipleiria.estg.dei.esoft.Backend.Cinema;
 import pt.ipleiria.estg.dei.esoft.UI.GestaoPag;
+import pt.ipleiria.estg.dei.esoft.UI.GestaoFilmes.GestaoFilmeMain;
+import pt.ipleiria.estg.dei.esoft.UI.GestaoFilmes.RegistoFilme;
+import pt.ipleiria.estg.dei.esoft.UI.GestaoSalas.GestaoSalasMain;
 import pt.ipleiria.estg.dei.esoft.UI.MainPag;
 
 import javax.swing.*;
@@ -33,6 +36,24 @@ public class Main {
 
     public static void mostrarGestaoPag() {
         frame.setContentPane(new GestaoPag(cinema, Main::mostrarMainPag).getMainPanel());
+        frame.revalidate();
+        frame.repaint();
+    }
+
+    public static void mostrarGestaoSalasMain() {
+        frame.setContentPane(new GestaoSalasMain(cinema, Main::mostrarGestaoPag).getMainPanel());
+        frame.revalidate();
+        frame.repaint();
+    }
+
+    public static void mostrarGestaoFilmeMain() {
+        frame.setContentPane(new GestaoFilmeMain(cinema, Main::mostrarGestaoPag).getMainPanel());
+        frame.revalidate();
+        frame.repaint();
+    }
+
+    public static void mostrarRegistoFilme() {
+        frame.setContentPane(new RegistoFilme(cinema, Main::mostrarGestaoFilmeMain).getMainPanel());
         frame.revalidate();
         frame.repaint();
     }

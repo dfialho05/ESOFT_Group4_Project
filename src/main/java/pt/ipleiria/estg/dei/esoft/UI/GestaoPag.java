@@ -1,6 +1,7 @@
 package pt.ipleiria.estg.dei.esoft.UI;
 
 import pt.ipleiria.estg.dei.esoft.Backend.Cinema;
+import pt.ipleiria.estg.dei.esoft.Main;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,12 +14,13 @@ public class GestaoPag {
     private JButton sessoesButton;
     private JButton logoButton;
     private final Cinema cinema;
+    private Runnable onLogoClick;
 
     public GestaoPag(Cinema cinema, Runnable onLogoClick) {
         this.cinema = cinema;
-
-        salasButton.addActionListener(e -> System.out.println("Salas button clicked"));
-        filmesButton.addActionListener(e -> System.out.println("Filmes button clicked"));
+        this.onLogoClick = onLogoClick;
+        salasButton.addActionListener(e -> Main.mostrarGestaoSalasMain());
+        filmesButton.addActionListener(e -> Main.mostrarGestaoFilmeMain());
         sessoesButton.addActionListener(e -> System.out.println("Sessoes button clicked"));
         logoButton.addActionListener(e -> onLogoClick.run());
     }

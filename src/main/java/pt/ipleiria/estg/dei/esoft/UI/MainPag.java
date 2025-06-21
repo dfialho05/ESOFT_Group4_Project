@@ -60,6 +60,7 @@ public class MainPag {
         gestaoButton = createRoundedButton("Gestão");
         vendasButton = createRoundedButton("Vendas");
         consultaButton = createRoundedButton("Consulta");
+        logoLabel = new JLabel();
     }
 
     private JButton createRoundedButton(String text) {

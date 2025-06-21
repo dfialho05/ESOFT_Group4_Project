@@ -12,12 +12,12 @@ public class Filme {
     private String genero;
     private int duracao; // em minutos
     private String sinopse;
-    private double precoAluguer;
+    private double precoAluguer; // Custo total da licença de exibição
     private int anoLancamento;
     private String classificacaoEtaria;
     private boolean ativo; // true se está em exibição, false caso contrário
-    private int diasMinimoAluguer; // período mínimo de aluguer em dias
-    private int diasMaximoAluguer; // período máximo de aluguer em dias
+    private int diasMinimoAluguer; // período mínimo da licença de exibição em dias
+    private int diasMaximoAluguer; // período máximo da licença de exibição em dias
     
     /**
      * Construtor padrão
@@ -152,7 +152,7 @@ public class Filme {
     }
     
     /**
-     * Método para obter o período de aluguer formatado
+     * Método para obter o período da licença de exibição formatado
      */
     public String getPeriodoAluguerFormatado() {
         if (diasMinimoAluguer == diasMaximoAluguer) {
@@ -163,35 +163,38 @@ public class Filme {
     }
     
     /**
-     * Método para calcular o preço total do aluguer para um número específico de dias
+     * Devolve o custo total da licença de exibição do filme.
+     * O parâmetro numeroDias é ignorado, uma vez que o preço é total.
+     * @param numeroDias Ignorado.
+     * @return O custo total da licença.
      */
     public double calcularPrecoAluguer(int numeroDias) {
         if (numeroDias < diasMinimoAluguer || numeroDias > diasMaximoAluguer) {
-            throw new IllegalArgumentException("Número de dias deve estar entre " + 
-                                               diasMinimoAluguer + " e " + diasMaximoAluguer);
+            throw new IllegalArgumentException("Número de dias solicitado para a licença está fora do período válido: " +
+                                               diasMinimoAluguer + " a " + diasMaximoAluguer);
         }
-        return precoAluguer * numeroDias;
+        return precoAluguer;
     }
     
     /**
-     * Método para verificar se um período de aluguer é válido
+     * Método para verificar se um período de licença é válido
      */
     public boolean isPeriodoAluguerValido(int numeroDias) {
         return numeroDias >= diasMinimoAluguer && numeroDias <= diasMaximoAluguer;
     }
     
     /**
-     * Método para obter a data de devolução baseada na data de aluguer
+     * Método para obter a data de fim da licença baseada na data de início
      */
     public LocalDate calcularDataDevolucao(LocalDate dataAluguer, int numeroDias) {
         if (!isPeriodoAluguerValido(numeroDias)) {
-            throw new IllegalArgumentException("Período de aluguer inválido");
+            throw new IllegalArgumentException("Período de licença inválido");
         }
         return dataAluguer.plusDays(numeroDias);
     }
     
     /**
-     * Método para calcular o número de dias restantes de um aluguer
+     * Método para calcular o número de dias restantes de uma licença
      */
     public long calcularDiasRestantes(LocalDate dataAluguer, LocalDate dataAtual, int numeroDias) {
         LocalDate dataDevolucao = calcularDataDevolucao(dataAluguer, numeroDias);
@@ -200,7 +203,7 @@ public class Filme {
     }
     
     /**
-     * Método para verificar se um aluguer está em atraso
+     * Método para verificar se uma licença está expirada
      */
     public boolean isAluguerEmAtraso(LocalDate dataAluguer, LocalDate dataAtual, int numeroDias) {
         LocalDate dataDevolucao = calcularDataDevolucao(dataAluguer, numeroDias);
