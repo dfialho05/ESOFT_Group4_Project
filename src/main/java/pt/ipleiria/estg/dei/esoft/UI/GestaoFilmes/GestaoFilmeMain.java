@@ -8,10 +8,11 @@ import java.awt.*;
 
 public class GestaoFilmeMain {
     private JPanel mainPanel;
-    private JButton pesquisaDeFilmesButton;
-    private JButton registoDeFilmeButton;
-    private JButton arquivoButton;
+    private JLabel titleLabel;
     private JButton logoButton;
+    private JButton pesquisaButton;
+    private JButton registoButton;
+    private JButton arquivoButton;
     private final Cinema cinema;
     private Runnable onLogoClick;
 
@@ -19,22 +20,53 @@ public class GestaoFilmeMain {
         this.cinema = cinema;
         this.onLogoClick = onLogoClick;
         
-        pesquisaDeFilmesButton.addActionListener(e -> {
-            PesquisaFilme pesquisaFilmeFrame = new PesquisaFilme(cinema);
-            pesquisaFilmeFrame.setVisible(true);
-        });
+        // Setup action listeners
+        setupActionListeners();
+        
+        // Setup logo after components are initialized
+        SwingUtilities.invokeLater(this::setupLogo);
+    }
 
-        registoDeFilmeButton.addActionListener(e -> Main.mostrarRegistoFilme());
+    private void setupLogo() {
+        if (logoButton == null) {
+            return; // Components not yet initialized
+        }
+        
+        try {
+            java.net.URL logoUrl = getClass().getResource("/logo.png");
+            if (logoUrl != null) {
+                ImageIcon logoIcon = new ImageIcon(logoUrl);
+                Image image = logoIcon.getImage();
+                Image newimg = image.getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH);
+                logoIcon = new ImageIcon(newimg);
+                logoButton.setIcon(logoIcon);
+            } else {
+                logoButton.setText("Logo");
+            }
+        } catch (Exception e) {
+            if (logoButton != null) {
+                logoButton.setText("Logo");
+            }
+            e.printStackTrace();
+        }
+    }
 
-        arquivoButton.addActionListener(e -> {
-            ArquivoFilme arquivoFilmeFrame = new ArquivoFilme(cinema);
-            arquivoFilmeFrame.setVisible(true);
-        });
-
-        logoButton.addActionListener(e -> onLogoClick.run());
+    private void setupActionListeners() {
+        if (logoButton != null) {
+            logoButton.addActionListener(e -> onLogoClick.run());
+        }
+        if (pesquisaButton != null) {
+            pesquisaButton.addActionListener(e -> Main.mostrarPesquisaFilme());
+        }
+        if (registoButton != null) {
+            registoButton.addActionListener(e -> Main.mostrarRegistoFilme());
+        }
+        if (arquivoButton != null) {
+            arquivoButton.addActionListener(e -> Main.mostrarArquivoFilme());
+        }
     }
 
     public JPanel getMainPanel() {
         return mainPanel;
     }
-}
+} 

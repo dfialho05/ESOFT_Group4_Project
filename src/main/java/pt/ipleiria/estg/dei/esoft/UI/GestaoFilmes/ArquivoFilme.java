@@ -7,27 +7,32 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class ArquivoFilme extends JFrame {
+public class ArquivoFilme {
     private JPanel mainPanel;
     private JPanel moviesPanel;
     private JScrollPane scrollPane;
     private JButton backButton;
     private Cinema cinema;
+    private final Runnable onBack;
 
-    public ArquivoFilme(Cinema cinema) {
+    public ArquivoFilme(Cinema cinema, Runnable onBack) {
         this.cinema = cinema;
-        setTitle("CinemaLiz - Filmes Arquivados");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(1200, 800);
-        setLocationRelativeTo(null);
-        setContentPane(mainPanel);
-
-        loadInactiveMovies();
-
-        backButton.addActionListener(e -> dispose());
+        this.onBack = onBack;
+        
+        // Setup components after they are initialized
+        SwingUtilities.invokeLater(() -> {
+            loadInactiveMovies();
+            if (backButton != null) {
+                backButton.addActionListener(e -> onBack.run());
+            }
+        });
     }
 
     private void loadInactiveMovies() {
+        if (moviesPanel == null) {
+            return;
+        }
+        
         moviesPanel.removeAll();
         moviesPanel.setLayout(new BoxLayout(moviesPanel, BoxLayout.Y_AXIS));
 
@@ -98,18 +103,22 @@ public class ArquivoFilme extends JFrame {
 
         JButton editButton = new JButton("Editar");
         editButton.addActionListener(e -> {
-            EditarFilme editFrame = new EditarFilme(filme, this::loadInactiveMovies);
-            editFrame.setVisible(true);
+            if (mainPanel != null) {
+                EditarFilme editarFilme = new EditarFilme(filme, this::loadInactiveMovies);
+                editarFilme.setVisible(true);
+            }
         });
 
         JButton activateButton = new JButton("Ativar");
         activateButton.setBackground(new Color(102, 187, 106)); // Green color
         activateButton.setForeground(Color.WHITE);
         activateButton.addActionListener(e -> {
-            int confirm = JOptionPane.showConfirmDialog(this, "Tem a certeza que deseja ativar este filme?", "Confirmar Ativação", JOptionPane.YES_NO_OPTION);
-            if (confirm == JOptionPane.YES_OPTION) {
-                filme.ativar();
-                loadInactiveMovies();
+            if (mainPanel != null) {
+                int confirm = JOptionPane.showConfirmDialog(mainPanel, "Tem a certeza que deseja ativar este filme?", "Confirmar Ativação", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    filme.ativar();
+                    loadInactiveMovies();
+                }
             }
         });
 
@@ -126,5 +135,9 @@ public class ArquivoFilme extends JFrame {
         moviesPanel = new JPanel();
         moviesPanel.setOpaque(true);
         moviesPanel.setBackground(new Color(0x2d3c42));
+    }
+
+    public JPanel getMainPanel() {
+        return mainPanel;
     }
 }

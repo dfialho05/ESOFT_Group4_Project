@@ -44,8 +44,11 @@ public class ListaSalasPag {
         this.cinema = cinema;
         this.onBack = onBack;
 
-        setupEventListeners();
-        loadSalas();
+        // Setup event listeners after components are initialized
+        SwingUtilities.invokeLater(() -> {
+            setupEventListeners();
+            loadSalas();
+        });
     }
 
     private void setupEventListeners() {
@@ -71,10 +74,11 @@ public class ListaSalasPag {
         }
         
         // Botão para filtrar por Tipo de Sala
-        if (tipoSalaButton != null || visualizacaoButton != null) {
-            ActionListener tipoSalaFilterListener = e -> filterByTipoSala();
-            if (tipoSalaButton != null) tipoSalaButton.addActionListener(tipoSalaFilterListener);
-            if (visualizacaoButton != null) visualizacaoButton.addActionListener(tipoSalaFilterListener);
+        if (tipoSalaButton != null) {
+            tipoSalaButton.addActionListener(e -> filterByTipoSala());
+        }
+        if (visualizacaoButton != null) {
+            visualizacaoButton.addActionListener(e -> filterByTipoSala());
         }
 
         // Botão para filtrar por Acessibilidade
@@ -84,6 +88,8 @@ public class ListaSalasPag {
     }
     
     private void filterByTipoSala() {
+        if (mainPanel == null) return;
+        
         Object[] options = {"Normal", "VIP", "Remover Filtro"};
         String result = (String) JOptionPane.showInputDialog(
                 mainPanel,
@@ -105,6 +111,8 @@ public class ListaSalasPag {
     }
 
     private void filterByAcessibilidade() {
+        if (mainPanel == null) return;
+        
         Object[] options = {"Com Acessibilidade", "Sem Acessibilidade", "Remover Filtro"};
         String currentSelection;
         if (filterTemAcessibilidade == null) {
@@ -155,11 +163,7 @@ public class ListaSalasPag {
 
     public void loadSalas() {
         if (salasPanel == null) {
-            // Fallback em caso de erro do form designer
-            salasPanel = new JPanel();
-            if (scrollPane != null) {
-                scrollPane.setViewportView(salasPanel);
-            }
+            return;
         }
         
         salasPanel.removeAll();
@@ -197,7 +201,9 @@ public class ListaSalasPag {
                 break;
             default:
                 // Sem ordenação, manter a ordem da lista
-                capacidadeButton.setText("Capacidade");
+                if (capacidadeButton != null) {
+                    capacidadeButton.setText("Capacidade");
+                }
                 break;
         }
         
@@ -312,26 +318,20 @@ public class ListaSalasPag {
         });
     }
 
-    private void createUIComponents() {
-        salasPanel = new JPanel();
-        salasPanel.setBackground(new Color(0x0091D5));
-    }
-
     private void updateFilterButtonStyles() {
-        if (filterTipoSala != null) {
-            tipoSalaButton.setText("Tipo: " + filterTipoSala);
-            visualizacaoButton.setText("Tipo: " + filterTipoSala);
-        } else {
-            tipoSalaButton.setText("Tipo de Sala");
-            visualizacaoButton.setText("Visualização");
-        }
-
-        if (filterTemAcessibilidade == null) {
-            acessibilidadeButton.setText("Acessibilidade");
-        } else if (filterTemAcessibilidade) {
-            acessibilidadeButton.setText("Acessibilidade: Com");
-        } else {
-            acessibilidadeButton.setText("Acessibilidade: Sem");
+        styleButton(tipoSalaButton, filterTipoSala != null);
+        styleButton(acessibilidadeButton, filterTemAcessibilidade != null);
+    }
+    
+    private void styleButton(JButton button, boolean active) {
+        if (button != null) {
+            if (active) {
+                button.setBackground(new Color(0x3B82F6)); // Cor ativa
+                button.setForeground(Color.WHITE);
+            } else {
+                button.setBackground(UIManager.getColor("Button.background")); // Cor padrão
+                button.setForeground(UIManager.getColor("Button.foreground"));
+            }
         }
     }
 }

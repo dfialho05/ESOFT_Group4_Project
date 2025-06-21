@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class PesquisaFilme extends JFrame {
+public class PesquisaFilme {
     private JPanel mainPanel;
     private JPanel moviesPanel;
     private JScrollPane scrollPane;
@@ -18,58 +18,72 @@ public class PesquisaFilme extends JFrame {
     private JButton filterClassificationButton;
     private JButton filterYearButton;
     private Cinema cinema;
+    private final Runnable onBack;
 
-    public PesquisaFilme(Cinema cinema) {
+    public PesquisaFilme(Cinema cinema, Runnable onBack) {
         this.cinema = cinema;
-        // Basic JFrame setup
-        setTitle("CinemaLiz - Pesquisa de Filmes");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(1200, 800);
-        setLocationRelativeTo(null);
-        setContentPane(mainPanel);
-
-        loadActiveMovies();
-
-        backButton.addActionListener(e -> dispose());
-        addSortActionListeners();
+        this.onBack = onBack;
+        
+        // Setup components after they are initialized
+        SwingUtilities.invokeLater(() -> {
+            loadActiveMovies();
+            if (backButton != null) {
+                backButton.addActionListener(e -> onBack.run());
+            }
+            addSortActionListeners();
+        });
     }
 
     private void addSortActionListeners() {
         // Sort by Title A-Z
-        filterAZButton.addActionListener(e -> {
-            List<Filme> filmes = cinema.getFilmes();
-            filmes.sort((f1, f2) -> f1.getTitulo().compareToIgnoreCase(f2.getTitulo()));
-            displayMovies(filmes);
-        });
+        if (filterAZButton != null) {
+            filterAZButton.addActionListener(e -> {
+                List<Filme> filmes = cinema.getFilmes();
+                filmes.sort((f1, f2) -> f1.getTitulo().compareToIgnoreCase(f2.getTitulo()));
+                displayMovies(filmes);
+            });
+        }
 
         // Sort by Title Z-A
-        filterZAButton.addActionListener(e -> {
-            List<Filme> filmes = cinema.getFilmes();
-            filmes.sort((f1, f2) -> f2.getTitulo().compareToIgnoreCase(f1.getTitulo()));
-            displayMovies(filmes);
-        });
+        if (filterZAButton != null) {
+            filterZAButton.addActionListener(e -> {
+                List<Filme> filmes = cinema.getFilmes();
+                filmes.sort((f1, f2) -> f2.getTitulo().compareToIgnoreCase(f1.getTitulo()));
+                displayMovies(filmes);
+            });
+        }
 
         // Sort by Genre
-        filterGenreButton.addActionListener(e -> {
-            List<Filme> filmes = cinema.getFilmes();
-            filmes.sort((f1, f2) -> f1.getGenero().compareToIgnoreCase(f2.getGenero()));
-            displayMovies(filmes);
-        });
+        if (filterGenreButton != null) {
+            filterGenreButton.addActionListener(e -> {
+                List<Filme> filmes = cinema.getFilmes();
+                filmes.sort((f1, f2) -> f1.getGenero().compareToIgnoreCase(f2.getGenero()));
+                displayMovies(filmes);
+            });
+        }
 
         // Sort by Classification
-        filterClassificationButton.addActionListener(e -> {
-            List<Filme> filmes = cinema.getFilmes();
-            // This is a simple alphabetical sort. A more complex sort might be needed for age ratings.
-            filmes.sort((f1, f2) -> f1.getClassificacaoEtaria().compareToIgnoreCase(f2.getClassificacaoEtaria()));
-            displayMovies(filmes);
-        });
+        if (filterClassificationButton != null) {
+            filterClassificationButton.addActionListener(e -> {
+                List<Filme> filmes = cinema.getFilmes();
+                // This is a simple alphabetical sort. A more complex sort might be needed for age ratings.
+                filmes.sort((f1, f2) -> f1.getClassificacaoEtaria().compareToIgnoreCase(f2.getClassificacaoEtaria()));
+                displayMovies(filmes);
+            });
+        }
 
         // Sort by Year
-        filterYearButton.addActionListener(e -> {
-            List<Filme> filmes = cinema.getFilmes();
-            filmes.sort((f1, f2) -> Integer.compare(f2.getAnoLancamento(), f1.getAnoLancamento())); // Most recent first
-            displayMovies(filmes);
-        });
+        if (filterYearButton != null) {
+            filterYearButton.addActionListener(e -> {
+                List<Filme> filmes = cinema.getFilmes();
+                filmes.sort((f1, f2) -> Integer.compare(f2.getAnoLancamento(), f1.getAnoLancamento())); // Most recent first
+                displayMovies(filmes);
+            });
+        }
+    }
+
+    public JPanel getMainPanel() {
+        return mainPanel;
     }
 
     private void loadActiveMovies() {
@@ -77,6 +91,10 @@ public class PesquisaFilme extends JFrame {
     }
 
     private void displayMovies(List<Filme> filmes) {
+        if (moviesPanel == null) {
+            return;
+        }
+        
         moviesPanel.removeAll();
         moviesPanel.setLayout(new BoxLayout(moviesPanel, BoxLayout.Y_AXIS));
 
@@ -150,16 +168,20 @@ public class PesquisaFilme extends JFrame {
 
         JButton editButton = new JButton("Editar");
         editButton.addActionListener(e -> {
-            EditarFilme editFrame = new EditarFilme(filme, this::loadActiveMovies);
-            editFrame.setVisible(true);
+            if (mainPanel != null) {
+                EditarFilme editarFilme = new EditarFilme(filme, this::loadActiveMovies);
+                editarFilme.setVisible(true);
+            }
         });
 
         JButton archiveButton = new JButton("Arquivar");
         archiveButton.addActionListener(e -> {
-            int confirm = JOptionPane.showConfirmDialog(this, "Tem a certeza que deseja arquivar este filme?", "Confirmar Arquivo", JOptionPane.YES_NO_OPTION);
-            if (confirm == JOptionPane.YES_OPTION) {
-                filme.desativar();
-                loadActiveMovies();
+            if (mainPanel != null) {
+                int confirm = JOptionPane.showConfirmDialog(mainPanel, "Tem a certeza que deseja arquivar este filme?", "Confirmar Arquivo", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    filme.desativar();
+                    loadActiveMovies();
+                }
             }
         });
 

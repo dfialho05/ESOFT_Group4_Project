@@ -23,10 +23,13 @@ public class ArquivoSalasPag {
         this.cinema = cinema;
         this.onBack = onBack;
 
-        loadSalas();
-        if (voltarButton != null) {
-            voltarButton.addActionListener(e -> onBack.run());
-        }
+        // Setup components after they are initialized
+        SwingUtilities.invokeLater(() -> {
+            if (voltarButton != null) {
+                voltarButton.addActionListener(e -> onBack.run());
+            }
+            loadSalas();
+        });
     }
 
     public JPanel getMainPanel() {
@@ -35,10 +38,7 @@ public class ArquivoSalasPag {
 
     public void loadSalas() {
         if (salasPanel == null) {
-            salasPanel = new JPanel();
-            if (scrollPane != null) {
-                scrollPane.setViewportView(salasPanel);
-            }
+            return;
         }
         
         salasPanel.removeAll();
@@ -109,10 +109,12 @@ public class ArquivoSalasPag {
         styleButton(ativarButton, new Color(76, 175, 80), new Color(56, 142, 60));
 
         ativarButton.addActionListener(e -> {
-            int result = JOptionPane.showConfirmDialog(mainPanel, "Tem a certeza que quer reativar a sala '" + sala.getNome() + "'?", "Confirmar Ativação", JOptionPane.YES_NO_OPTION);
-            if (result == JOptionPane.YES_OPTION) {
-                sala.setAtivo(true);
-                loadSalas();
+            if (mainPanel != null) {
+                int result = JOptionPane.showConfirmDialog(mainPanel, "Tem a certeza que quer reativar a sala '" + sala.getNome() + "'?", "Confirmar Ativação", JOptionPane.YES_NO_OPTION);
+                if (result == JOptionPane.YES_OPTION) {
+                    sala.setAtivo(true);
+                    loadSalas();
+                }
             }
         });
 

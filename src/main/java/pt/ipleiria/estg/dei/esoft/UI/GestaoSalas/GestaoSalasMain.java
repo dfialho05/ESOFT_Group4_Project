@@ -8,26 +8,65 @@ import java.awt.*;
 
 public class GestaoSalasMain {
     private JPanel mainPanel;
-    private JPanel contentPanel;
-    private JButton listaDeSalasButton;
-    private JButton criarSalaButton;
-    private JButton arquivoButton;
+    private JLabel titleLabel;
     private JButton logoButton;
+    private JButton listaButton;
+    private JButton criarButton;
+    private JButton arquivoButton;
     private final Cinema cinema;
+    private final Runnable onLogoClick;
 
     public GestaoSalasMain(Cinema cinema, Runnable onLogoClick) {
         this.cinema = cinema;
+        this.onLogoClick = onLogoClick;
         
-        listaDeSalasButton.addActionListener(e -> Main.mostrarListaSalasPag());
+        // Setup action listeners
+        setupActionListeners();
         
-        arquivoButton.addActionListener(e -> Main.mostrarArquivoSalasPag());
+        // Setup logo after components are initialized
+        SwingUtilities.invokeLater(this::setupLogo);
+    }
+
+    private void setupLogo() {
+        if (logoButton == null) {
+            return; // Components not yet initialized
+        }
         
-        criarSalaButton.addActionListener(e -> Main.mostrarCriarSalaPag());
-        
-        logoButton.addActionListener(e -> onLogoClick.run());
+        try {
+            java.net.URL logoUrl = getClass().getResource("/logo.png");
+            if (logoUrl != null) {
+                ImageIcon logoIcon = new ImageIcon(logoUrl);
+                Image image = logoIcon.getImage();
+                Image newimg = image.getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH);
+                logoIcon = new ImageIcon(newimg);
+                logoButton.setIcon(logoIcon);
+            } else {
+                logoButton.setText("Logo");
+            }
+        } catch (Exception e) {
+            if (logoButton != null) {
+                logoButton.setText("Logo");
+            }
+            e.printStackTrace();
+        }
+    }
+
+    private void setupActionListeners() {
+        if (logoButton != null) {
+            logoButton.addActionListener(e -> onLogoClick.run());
+        }
+        if (listaButton != null) {
+            listaButton.addActionListener(e -> Main.mostrarListaSalasPag());
+        }
+        if (criarButton != null) {
+            criarButton.addActionListener(e -> Main.mostrarCriarSalaPag());
+        }
+        if (arquivoButton != null) {
+            arquivoButton.addActionListener(e -> Main.mostrarArquivoSalasPag());
+        }
     }
 
     public JPanel getMainPanel() {
         return mainPanel;
     }
-}
+} 

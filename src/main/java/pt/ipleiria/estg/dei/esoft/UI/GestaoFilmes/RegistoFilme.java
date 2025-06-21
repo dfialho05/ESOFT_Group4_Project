@@ -20,80 +20,81 @@ public class RegistoFilme {
     private JTextField diasMaximoField;
     private JButton registarButton;
     private JButton voltarButton;
+    private final Cinema cinema;
+    private final Runnable onBack;
 
     public RegistoFilme(Cinema cinema, Runnable onBack) {
-        // 1. Chamar createUIComponents PRIMEIRO
-        createUIComponents();
+        this.cinema = cinema;
+        this.onBack = onBack;
 
-        // 2. Adicionar os listeners DEPOIS de tudo estar inicializado
-        if (voltarButton != null) {
-            this.voltarButton.addActionListener(e -> onBack.run());
-        }
+        // Setup components after they are initialized
+        SwingUtilities.invokeLater(() -> {
+            if (voltarButton != null) {
+                voltarButton.addActionListener(e -> onBack.run());
+            }
 
-        if (registarButton != null) {
-            registarButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    try {
-                        String titulo = tituloFilmeField.getText();
-                        String genero = generoFilmeField.getText();
-                        int duracao = Integer.parseInt(duracaoFilmeField.getText());
-                        String classificacao = classificacaoEtariaField.getText();
-                        int ano = Integer.parseInt(anoLancamentoField.getText());
-                        double preco = Double.parseDouble(precoAluguelField.getText());
-                        String sinopse = sinopseArea.getText();
-                        int diasMin = Integer.parseInt(diasMinimoField.getText());
-                        int diasMax = Integer.parseInt(diasMaximoField.getText());
+            if (registarButton != null) {
+                registarButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            if (tituloFilmeField == null || generoFilmeField == null || duracaoFilmeField == null || 
+                                classificacaoEtariaField == null || anoLancamentoField == null || precoAluguelField == null || 
+                                sinopseArea == null || diasMinimoField == null || diasMaximoField == null) {
+                                return;
+                            }
+                            
+                            String titulo = tituloFilmeField.getText();
+                            String genero = generoFilmeField.getText();
+                            int duracao = Integer.parseInt(duracaoFilmeField.getText());
+                            String classificacao = classificacaoEtariaField.getText();
+                            int ano = Integer.parseInt(anoLancamentoField.getText());
+                            double preco = Double.parseDouble(precoAluguelField.getText());
+                            String sinopse = sinopseArea.getText();
+                            int diasMin = Integer.parseInt(diasMinimoField.getText());
+                            int diasMax = Integer.parseInt(diasMaximoField.getText());
 
-                        if (titulo.isEmpty() || genero.isEmpty() || classificacao.isEmpty() || sinopse.isEmpty()) {
-                            JOptionPane.showMessageDialog(mainPanel, "Por favor preencha todos os campos.", "Erro", JOptionPane.ERROR_MESSAGE);
-                            return;
+                            if (titulo.isEmpty() || genero.isEmpty() || classificacao.isEmpty() || sinopse.isEmpty()) {
+                                if (mainPanel != null) {
+                                    JOptionPane.showMessageDialog(mainPanel, "Por favor preencha todos os campos.", "Erro", JOptionPane.ERROR_MESSAGE);
+                                }
+                                return;
+                            }
+
+                            Filme novoFilme = new Filme(titulo, genero, duracao, sinopse, preco, ano, classificacao, true, diasMin, diasMax);
+
+                            cinema.adicionarFilme(novoFilme);
+
+                            System.out.println("Filme registado com sucesso:");
+                            System.out.println(novoFilme.toString());
+                            if (mainPanel != null) {
+                                JOptionPane.showMessageDialog(mainPanel, "Filme registado com sucesso!");
+                            }
+
+                            // Limpar os campos após o registo
+                            tituloFilmeField.setText("");
+                            generoFilmeField.setText("");
+                            duracaoFilmeField.setText("");
+                            classificacaoEtariaField.setText("");
+                            anoLancamentoField.setText("");
+                            precoAluguelField.setText("");
+                            sinopseArea.setText("");
+                            diasMinimoField.setText("");
+                            diasMaximoField.setText("");
+
+
+                        } catch (NumberFormatException ex) {
+                            if (mainPanel != null) {
+                                JOptionPane.showMessageDialog(mainPanel, "Por favor insira valores numéricos válidos para duração, ano, preço e dias de aluguer.", "Erro de Formato", JOptionPane.ERROR_MESSAGE);
+                            }
                         }
-
-                        Filme novoFilme = new Filme(titulo, genero, duracao, sinopse, preco, ano, classificacao, true, diasMin, diasMax);
-
-                        cinema.adicionarFilme(novoFilme);
-
-                        System.out.println("Filme registado com sucesso:");
-                        System.out.println(novoFilme.toString());
-                        JOptionPane.showMessageDialog(mainPanel, "Filme registado com sucesso!");
-
-                        // Limpar os campos após o registo
-                        tituloFilmeField.setText("");
-                        generoFilmeField.setText("");
-                        duracaoFilmeField.setText("");
-                        classificacaoEtariaField.setText("");
-                        anoLancamentoField.setText("");
-                        precoAluguelField.setText("");
-                        sinopseArea.setText("");
-                        diasMinimoField.setText("");
-                        diasMaximoField.setText("");
-
-
-                    } catch (NumberFormatException ex) {
-                        JOptionPane.showMessageDialog(mainPanel, "Por favor insira valores numéricos válidos para duração, ano, preço e dias de aluguer.", "Erro de Formato", JOptionPane.ERROR_MESSAGE);
                     }
-                }
-            });
-        }
+                });
+            }
+        });
     }
 
     public JPanel getMainPanel() {
         return mainPanel;
-    }
-
-    private void createUIComponents() {
-        // O GUI Designer é responsável por inicializar os componentes.
-        // Manter este método vazio se não houver criação de componentes personalizados.
-    }
-
-    public static void main(String[] args) {
-        // Para fins de teste, pode-se criar um frame temporário
-        JFrame frame = new JFrame("CinemaLiz - Registo de Filme");
-        Cinema cinemaDeTeste = new Cinema(); // Cinema de teste
-        frame.setContentPane(new RegistoFilme(cinemaDeTeste, () -> System.exit(0)).getMainPanel());
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
     }
 }

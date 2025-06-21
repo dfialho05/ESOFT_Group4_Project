@@ -26,41 +26,52 @@ public class CriarSalaPag {
     private Runnable onBack;
 
     public CriarSalaPag(Cinema cinema, Runnable onBack) {
-        // 1. Chamar createUIComponents PRIMEIRO para que o GUI Designer inicialize os painéis
-        createUIComponents();
-        
-        // 2. Definir as propriedades da classe
         this.cinema = cinema;
         this.onBack = onBack;
-
-        // 3. Adicionar os listeners e manipular os componentes DEPOIS de tudo estar inicializado
-        // Group the checkboxes to ensure only one is selected
-        ButtonGroup tipoSalaGroup = new ButtonGroup();
-        tipoSalaGroup.add(normalSalaCheckBox);
-        tipoSalaGroup.add(vipSalaCheckBox);
-        normalSalaCheckBox.setSelected(true); // Default selection
-
-        // Add listeners for automatic capacity calculation
-        larguraField.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-                calcularCapacidade();
-            }
-        });
         
-        alturaField.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-                calcularCapacidade();
+        // Setup components after they are initialized
+        SwingUtilities.invokeLater(() -> {
+            // Group the checkboxes to ensure only one is selected
+            if (normalSalaCheckBox != null && vipSalaCheckBox != null) {
+                ButtonGroup tipoSalaGroup = new ButtonGroup();
+                tipoSalaGroup.add(normalSalaCheckBox);
+                tipoSalaGroup.add(vipSalaCheckBox);
+                normalSalaCheckBox.setSelected(true); // Default selection
+            }
+
+            // Add listeners for automatic capacity calculation
+            if (larguraField != null) {
+                larguraField.addKeyListener(new KeyAdapter() {
+                    @Override
+                    public void keyReleased(KeyEvent e) {
+                        calcularCapacidade();
+                    }
+                });
+            }
+            
+            if (alturaField != null) {
+                alturaField.addKeyListener(new KeyAdapter() {
+                    @Override
+                    public void keyReleased(KeyEvent e) {
+                        calcularCapacidade();
+                    }
+                });
+            }
+
+            if (criarSalaButton != null) {
+                criarSalaButton.addActionListener(e -> criarSala());
+            }
+            if (voltarButton != null) {
+                voltarButton.addActionListener(e -> onBack.run());
             }
         });
-
-        criarSalaButton.addActionListener(e -> criarSala());
-        voltarButton.addActionListener(e -> onBack.run());
     }
 
     private void calcularCapacidade() {
         try {
+            if (larguraField == null || alturaField == null || capacidadeLabel == null) {
+                return;
+            }
             String larguraStr = larguraField.getText().trim();
             String alturaStr = alturaField.getText().trim();
             
@@ -73,11 +84,18 @@ public class CriarSalaPag {
                 capacidadeLabel.setText("Capacidade Total: --");
             }
         } catch (NumberFormatException e) {
-            capacidadeLabel.setText("Capacidade Total: --");
+            if (capacidadeLabel != null) {
+                capacidadeLabel.setText("Capacidade Total: --");
+            }
         }
     }
 
     private void criarSala() {
+        if (nomeSalaField == null || larguraField == null || alturaField == null || 
+            normalSalaCheckBox == null || cadeiraDeRodasCheck == null) {
+            return;
+        }
+        
         String nome = nomeSalaField.getText();
         String larguraStr = larguraField.getText();
         String alturaStr = alturaField.getText();
@@ -113,7 +131,9 @@ public class CriarSalaPag {
             nomeSalaField.setText("");
             larguraField.setText("");
             alturaField.setText("");
-            capacidadeLabel.setText("Capacidade Total: --");
+            if (capacidadeLabel != null) {
+                capacidadeLabel.setText("Capacidade Total: --");
+            }
             cadeiraDeRodasCheck.setSelected(false);
             normalSalaCheckBox.setSelected(true);
 
@@ -124,29 +144,5 @@ public class CriarSalaPag {
 
     public JPanel getMainPanel() {
         return mainPanel;
-    }
-
-    private void createUIComponents() {
-        // Apenas o roundedPanel é personalizado, o mainPanel será criado pelo GUI Designer.
-        roundedPanel = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                // Este código cria o efeito de painel com cantos arredondados.
-                // É importante chamar super.paintComponent(g) para garantir que os
-                // componentes filhos do painel (botões, campos de texto, etc.) sejam desenhados.
-                Graphics2D g2d = (Graphics2D) g.create();
-                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                
-                // Usamos a cor de fundo do formulário para o efeito de "recorte".
-                g2d.setColor(new Color(0x0091D5));
-                g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 50, 50);
-                
-                // Deixamos a classe pai tratar do resto da pintura (incluindo os filhos).
-                super.paintComponent(g);
-                g2d.dispose();
-            }
-        };
-        // Para que o fundo do mainPanel seja visível nos cantos, este painel não pode ser opaco.
-        roundedPanel.setOpaque(false);
     }
 }
